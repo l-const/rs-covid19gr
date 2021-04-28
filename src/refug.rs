@@ -22,6 +22,21 @@ impl IntoIterator for RefCamps {
     }
 }
 
+/// Slice Iterator for RefCamp.
+pub type IterRefCamp<'iter> = core::slice::Iter<'iter, RefCamp>;
+/// Mutable slice Iterator for RefCamp.
+pub type IterMutRefCamp<'iter_mut> = core::slice::IterMut<'iter_mut, RefCamp>;
+
+impl RefCamps {
+    pub fn iter(&self) -> IterRefCamp {
+        self.refugee_camps.iter()
+    }
+
+    pub fn iter_mut(&mut self) -> IterMutRefCamp {
+        self.refugee_camps.iter_mut()
+    }
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct RefCamp {
     pub area_type_en: String,
@@ -101,10 +116,29 @@ mod tests {
     fn test_get_refugee_camp_data() {}
 
     #[test]
-    fn test_iterator() {
+    fn test_into_iterator() {
         let ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
         ref_camps
             .into_iter()
             .for_each(|ref_camp| println!("{:?}", ref_camp));
+    }
+
+    #[test]
+    fn test_iter() {
+          let ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
+        ref_camps
+            .iter()
+            .for_each(|r| println!("{:?}", r));
+    }
+
+
+    #[test]
+    fn test_iter_mut() {
+        let mut ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
+        let mut iter_mut = ref_camps
+            .iter_mut();
+        let mut first = iter_mut.next();
+        let mut second = iter_mut.next();
+        println!("{:?} {:?}", first, second);
     }
 }
