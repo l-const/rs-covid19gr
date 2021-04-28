@@ -201,9 +201,10 @@ pub struct SchoolSlice {
     pub UnitName: String,
 }
 
-// #[cfg(test)]
-// mod tests {
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     use super::*;
-
-// }
+    #[test]
+    fn test_Ser() {}
+}

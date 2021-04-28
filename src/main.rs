@@ -11,7 +11,7 @@ struct Deaths {
     cases: Vec<DeathSlot>,
 }
 
-#[derive(Deserialize, Serialize,Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 struct DeathSlot {
     deaths: u32,
     date: String,

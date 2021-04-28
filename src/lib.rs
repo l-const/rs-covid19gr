@@ -4,15 +4,14 @@ pub mod daily;
 pub mod hosp;
 pub mod refug;
 
-// pub use daily::*;
-// pub use refug::*;
-// pub use cum::*;
-// pub use hosp::*;
+/// Define custom Result
+type Result<T> = std::result::Result<T, CrateError>;
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
+/// Represents different type of errors that can happen.
+#[derive(Debug, Clone, PartialEq)]
+enum CrateError {
+    /// The error was cuased during serializing/deserializing data from JSON.
+    SerialError,
+    /// The error was caused during an HTTP GET request.
+    HttpError,
 }

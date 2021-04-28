@@ -35,20 +35,31 @@ pub struct TotalSlice {
     pub total_deaths: u32,
     pub total_samples: u32,
     pub total_samples_negative: u32,
-    pub total_Samples_positive: u32 
+    pub total_samples_positive: u32,
 }
 
+// HTTP GET /western-macedonia-deaths
+/// Death records in Western Macedonia
+#[derive(Debug, Deserialize, Serialize)]
+pub struct WestMacDeathSeries {
+    #[serde(rename = "western-macedonia-deaths")]
+    pub western_macedonia_deaths: Vec<WestMacDeathSlice>,
+}
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct WestMacDeathSlice {
+    pub age: u32,
+    pub date: String,
+    pub permanent_residence_municipality_en: String,
+    pub permanent_residence_municipality_gr: String,
+    pub sex: String,
+    pub underlying_diseases: String,
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-
     #[test]
-    fn test_des_west_mac(){
-
-    }
+    fn test_des_west_mac() {}
 }
-
-
