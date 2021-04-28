@@ -125,18 +125,14 @@ mod tests {
 
     #[test]
     fn test_iter() {
-          let ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
-        ref_camps
-            .iter()
-            .for_each(|r| println!("{:?}", r));
+        let ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
+        ref_camps.iter().for_each(|r| println!("{:?}", r));
     }
-
 
     #[test]
     fn test_iter_mut() {
         let mut ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
-        let mut iter_mut = ref_camps
-            .iter_mut();
+        let mut iter_mut = ref_camps.iter_mut();
         let mut first = iter_mut.next();
         let mut second = iter_mut.next();
         println!("{:?} {:?}", first, second);
