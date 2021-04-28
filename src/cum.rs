@@ -1,7 +1,7 @@
 //! Cumulative data
 
 // HTTP GET /total
-/// Get the lastest cummulative data in Greece
+/// Latest total cummulative data in Greece
 pub struct Total {
     cases: TotalSlice,
 }
@@ -13,7 +13,7 @@ pub struct TotalSlice {
 }
 
 // HTTP GET /regions
-/// Get the latest cumulative number of confirmed cases region in Greece
+/// Latest cumulative number of confirmed cases per region in Greece
 pub struct Regions {
     regions: Vec<Region>,
 }

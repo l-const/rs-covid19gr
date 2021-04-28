@@ -1,158 +1,209 @@
 //! Daily recorded events
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 // HTTP GET /confirmed
-// Confirmed cases  
+// Confirmed cases
 /// Confirmed and fatal cases reported in Greece as timeseries
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ConfirmedSeries {
-    cases: Vec<Confirmed>,
+    pub cases: Vec<Confirmed>,
 }
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Confirmed {
-    confirmed: u32,
-    date: String,
+    pub confirmed: u32,
+    pub date: String,
 }
 
 // HTTP GET /recovered
 // Recovered cases
-/// Recovered cases reported in Greece as timeseries. 
-#[derive(Debug, Deserialize)]
+/// Recovered cases reported in Greece as timeseries.
+#[derive(Debug, Deserialize, Serialize)]
 pub struct RecoveredSeries {
-    cases: Vec<Recovered>,
+    pub cases: Vec<Recovered>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Recovered {
-    recovered: u32,
-    date: String,
+    pub recovered: u32,
+    pub date: String,
 }
 
 // HTTP GET /deaths
 // Deaths
 /// Deaths reported in Greece as timeseries.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct DeathSeries {
-    cases: Vec<Deaths>,
+    pub cases: Vec<Deaths>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Deaths {
-    deaths: u32,
-    date: String,
+    pub deaths: u32,
+    pub date: String,
 }
 
 // HTTP GET /active
 // Active cases
 /// Active cases reported in Greece as timeseries
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ActiveSeries {
-    cases: Vec<Active>,
+    pub cases: Vec<Active>,
 }
 
-
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Active {
-    active: u32,
-    date: String,
+    pub active: u32,
+    pub date: String,
 }
 
 // HTTP GET /intensive-care
 // Patients in intensive care
 /// Patients in intensive care units reported in Greece as timseries
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct IntensiveSeries {
-    cases: Vec<Intensive>,
+    pub cases: Vec<Intensive>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Intensive {
-    intensive_care: u32,
-    date: String,
+    pub intensive_care: u32,
+    pub date: String,
 }
 
 // HTTP GET /total-tests
 // Test performed
 /// Number of tests performed reported in Greece as timseries
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct TestSeries {
-    cases: Vec<Tests>,
+    pub cases: Vec<Tests>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Tests {
-    tests: u32,
+    pub tests: u32,
     // check actual json-field : rapid-tests
     #[serde(rename = "rapid-tests")]
-    rapid_tests: u32,
-    date: String,
+    pub rapid_tests: u32,
+    pub date: String,
 }
 
 // HTTP GET /age-distribution-history
 /// Age distribution of cases timeline
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct AgeDistributionSeries {
-    age_distribution: Vec<AgeDistributionSlice>,
+    pub age_distribution: Vec<AgeDistributionSlice>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct AgeDistributionSlice {
-    date: String,
-    cases: AgeSlice,
-    critical: AgeSlice,
-    deaths: AgeSlice,
+    pub date: String,
+    pub cases: AgeSlice,
+    pub critical: AgeSlice,
+    pub deaths: AgeSlice,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct AgeSlice {
     #[serde(rename = "0-17")]
-    age_group1: u32,
+    pub age_group1: u32,
     #[serde(rename = "18-39")]
-    age_group2: u32,
+    pub age_group2: u32,
     #[serde(rename = "40-64")]
-    age_group3: u32,
+    pub age_group3: u32,
     #[serde(rename = "65+")]
-    age_group4: u32,
-
+    pub age_group4: u32,
 }
 
 /// Number of confirmed cases per region in Greece as timeseries
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct RegionsHistorySeries {
-    regions_history : Vec<Regions>
+    pub regions_history: Vec<Regions>,
 }
 
-
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Regions {
-    date : String,
-    regions:  Vec<RegionSlice>
+    pub date: String,
+    pub regions: Vec<RegionSlice>,
 }
 
-
-
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct RegionSlice {
-    area_en : String,
-    area_gr : String,
-    cases : Option<String>,
-    geo_department_en : String,
-    geo_department_gr : String,
-    last_updated_at: String,
-    latitude: f64,
-    longtitude: f64,
-    region_en: String,
-    region_gr: String, 
+    pub area_en: String,
+    pub area_gr: String,
+    pub cases: Option<String>,
+    pub geo_department_en: String,
+    pub geo_department_gr: String,
+    pub last_updated_at: String,
+    pub latitude: f64,
+    pub longtitude: f64,
+    pub region_en: String,
+    pub region_gr: String,
 }
 
-
-
-#[cfg(test)]
-mod tests {
-
-    use super::*;
-    
-    
-
+// HTTP GET /male-cases-history
+/// Age distribution of male cases timeline
+#[derive(Debug, Deserialize, Serialize)]
+pub struct MaleCasesHistory {
+    #[serde(rename = "male-cases")]
+    pub male_cases: Vec<AgeDistributionSlice>,
 }
+
+// HTTP GET /female-cases-history
+/// Age distribution of male cases timeline
+#[derive(Debug, Deserialize, Serialize)]
+pub struct FemaleCasesHistory {
+    #[serde(rename = "female-cases")]
+    pub female_cases: Vec<AgeDistributionSlice>,
+}
+
+// HTTP GET /vaccinations-per-region-history
+/// Vaccinations per region timeline
+#[derive(Debug, Deserialize, Serialize)]
+pub struct VaccineSeries {
+    #[serde(rename = "vaccinations-history")]
+    pub vaccinations_history: Vec<VaccineSlice>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct VaccineSlice {
+    pub area_gr: String,
+    pub area_en: String,
+    pub dailydose1: u32,
+    pub dailydose2: u32,
+    pub daydiff: u32,
+    pub daytotal: u32,
+    pub referencedate: String,
+    pub totaldistinctpersons: u32,
+    pub totaldose1: u32,
+    pub totaldose2: u32,
+    pub totalvaccinations: u32,
+}
+
+// HTPP GET /school-status
+/// School operation
+pub struct SchoolStatusSeries {
+    pub school_status: Vec<SchoolSlice>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SchoolSlice {
+    pub Address: String,
+    pub Area: String,
+    pub DateFrom: String,
+    pub DateTo: String,
+    pub Latitude: f64,
+    pub Longtitude: f64,
+    pub MunicipalUnit: u32,
+    pub Municipality: String,
+    pub Remarks: String,
+    pub SchoolKind: String,
+    pub UnitName: String,
+}
+
+// #[cfg(test)]
+// mod tests {
+
+//     use super::*;
+
+// }
