@@ -6,12 +6,12 @@ use serde::{Deserialize, Serialize};
 
 const BASE_URL: &'static str = "https://covid-19-greece.herokuapp.com";
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 struct Deaths {
     cases: Vec<DeathSlot>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 struct DeathSlot {
     deaths: u32,
     date: String,

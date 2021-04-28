@@ -4,7 +4,9 @@ version = "0.1.0"
 authors = ["l-const <const-l@outlook.com>"]
 edition = "2018"
 license = "MIT"
-
+repository = "https://github.com/l-const/rs-covid19gr"
+description = "Rust bindings to the Covid19gr API"
+categories = ["API"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
