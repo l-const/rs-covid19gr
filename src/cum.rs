@@ -51,7 +51,6 @@ pub struct AgeDistItem {
     pub age_average: u32,
     pub average_death_age: u8,
     pub total_age_groups: TotalAgeRes,
-    pub updated: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -59,6 +58,7 @@ pub struct TotalAgeRes {
     pub cases: AgeSlice,
     pub critical: AgeSlice,
     pub deaths: AgeSlice,
+    pub updated: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -77,15 +77,31 @@ pub struct AgeSlice {
 /// Gender distribution of patients
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GenderDistribution {
-    pub gender_percentages: AgeDistItem,
+    pub gender_percentages: GenderDistItem,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GenderDistItem {
-    pub total_females_percenage: f32,
-    pub total_males_percentage: u32,
+    pub total_females: f32,
+    pub total_males: u32,
     pub updated: String,
 }
+
+// HTTP /total-vaccinations
+/// Total vaccinations
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TotalVaccinations {
+    #[serde(rename = "total-vaccinations")]
+    total_vaccinations: Vec<TotalVaccineSlice>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TotalVaccineSlice {
+    totaldistinctpersons: u32,
+    totalvaccinations: u32,
+    updated: String
+}
+
 
 // TODO : /total-vaccinations-per-region
 // TODO : /gender-age-distribution
@@ -93,18 +109,137 @@ pub struct GenderDistItem {
 // TODO : /risk-levels
 // TODO : /measures-by-risk-level
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TotalVaccinations {
-    #[serde(rename = "total-vaccinations")]
-    total_vaccinations: TotalVaccineSlice,
-}
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TotalVaccineSlice {}
+
+
+
+
 
 mod tests {
     use super::*;
 
     #[test]
-    fn test_des_region() {}
+    fn test_des_total() {
+        const STR_JSON: &str = r#"
+        {
+          "cases": {
+                "confirmed": 0,
+                "deaths": 0,
+                "date": "2021-04-29"
+           }
+        }
+        "#;
+        let total : Result<Total,_> = serde_json::from_str(STR_JSON);
+        println!("{:?}", total);
+        assert!(total.is_ok());
+
+    }
+
+    #[test]
+    fn test_des_regions() {
+        const STR_JSON: &str = r#"
+        {
+            "regions": [
+              {
+                "area_gr": "string",
+                "area_en": "string",
+                "region_gr": "string",
+                "region_en": "string",
+                "geo_department_gr": "string",
+                "geo_department_en": "string",
+                "last_updated_at": "2021-04-29",
+                "longtitude": 0,
+                "latitude": 0,
+                "population": 0,
+                "total_cases": 0,
+                "cases_per_100000_people": 0
+              }
+            ]
+          }
+        "#;
+        let regions : Result<Regions,_> = serde_json::from_str(STR_JSON);
+        println!("{:?}", regions);
+        assert!(regions.is_ok());
+    }
+
+    #[test]
+    fn test_des_age_distribution() {
+        const STR_JSON : &str = r#"
+            {
+                "age_distribution": {
+                    "age_average": 0,
+                    "average_death_age": 0,
+                    "total_age_groups": {
+                    "cases": {
+                        "0-17": 0,
+                        "18-39": 0,
+                        "40-64": 0,
+                        "65+": 0
+                    },
+                    "critical": {
+                        "0-17": 0,
+                        "18-39": 0,
+                        "40-64": 0,
+                        "65+": 0
+                    },
+                    "deaths": {
+                        "0-17": 0,
+                        "18-39": 0,
+                        "40-64": 0,
+                        "65+": 0
+                    },
+                    "updated": "2021-04-29"
+                    }
+                }
+                }
+        "#;
+
+        let age_dist : Result<AgeDistribution,_> = serde_json::from_str(STR_JSON);
+        println!("{:?}", age_dist);
+        assert!(age_dist.is_ok());
+    }
+
+
+    #[test]
+    fn test_des_gender_distribution(){
+         const STR_JSON : &str = r#"
+         {
+            "gender_percentages" : {
+                "total_females" : 0,
+                "total_males": 0,
+                "updated": "2021-04-29"
+            }
+         }
+        "#;
+        let gender_dist : Result<GenderDistribution,_> = serde_json::from_str(STR_JSON);
+        println!("{:?}", gender_dist);
+        assert!(gender_dist.is_ok());
+    }
+
+    #[test]
+    fn test_des_total_vaccinations(){
+         const STR_JSON : &str = r#"
+                {
+                    "total-vaccinations": [
+                        {
+                            "totaldistinctpersons" : 0,
+                            "totalvaccinations": 0,
+                            "updated": "2021-04-29"
+                        }
+                    ]
+                } 
+        "#;
+        let total_vacc : Result<TotalVaccinations,_> = serde_json::from_str(STR_JSON);
+        println!("{:?}",total_vacc);
+        assert!(total_vacc.is_ok());
+    }
+
+
+
 }
+
+
+
+
+
+

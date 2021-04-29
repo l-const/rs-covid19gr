@@ -1,9 +1,10 @@
 //! Per refugee camp data
 
+use std::ops::Deref;
+
 use serde::{Deserialize, Serialize};
 
 use crate::build_request;
-use crate::BASE_URL;
 
 // HTTP GET /regugee-camps
 /// Recorded cases in Refugee-camps.
@@ -11,6 +12,13 @@ use crate::BASE_URL;
 pub struct RefCamps {
     #[serde(rename = "refugee-camps")]
     pub refugee_camps: Vec<RefCamp>,
+}
+
+impl Deref for RefCamps {
+    type Target = Vec<RefCamp>;
+    fn deref(&self) -> &Self::Target {
+        &self.refugee_camps
+    }
 }
 
 impl IntoIterator for RefCamps {
@@ -75,7 +83,7 @@ mod tests {
 
     use super::*;
 
-    const str_json: &str = r#"{
+    const STR_JSON: &str = r#"{
               "refugee-camps":
               [
                                {
@@ -107,7 +115,7 @@ mod tests {
 
     #[test]
     fn test_deserilize_refugee() {
-        let ref_camps: Result<RefCamps, _> = serde_json::from_str(str_json);
+        let ref_camps: Result<RefCamps, _> = serde_json::from_str(STR_JSON);
         assert!(ref_camps.is_ok());
         //println!("RefCamps: {:?}", &ref_camps);
     }
@@ -117,7 +125,7 @@ mod tests {
 
     #[test]
     fn test_into_iterator() {
-        let ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
+        let ref_camps: RefCamps = serde_json::from_str(STR_JSON).unwrap();
         ref_camps
             .into_iter()
             .for_each(|ref_camp| println!("{:?}", ref_camp));
@@ -125,16 +133,23 @@ mod tests {
 
     #[test]
     fn test_iter() {
-        let ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
+        let ref_camps: RefCamps = serde_json::from_str(STR_JSON).unwrap();
         ref_camps.iter().for_each(|r| println!("{:?}", r));
     }
 
     #[test]
     fn test_iter_mut() {
-        let mut ref_camps: RefCamps = serde_json::from_str(str_json).unwrap();
+        let mut ref_camps: RefCamps = serde_json::from_str(STR_JSON).unwrap();
         let mut iter_mut = ref_camps.iter_mut();
         let mut first = iter_mut.next();
         let mut second = iter_mut.next();
         println!("{:?} {:?}", first, second);
+    }
+
+    #[test]
+    fn test_derer() {
+        let ref_camps: RefCamps = serde_json::from_str(STR_JSON).unwrap();
+        let vec_ref = ref_camps.deref();
+        println!("{:?}", (*ref_camps).iter());
     }
 }
