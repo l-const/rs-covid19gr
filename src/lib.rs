@@ -13,7 +13,7 @@ const BASE_URL: &'static str = "https://covid-19-greece.herokuapp.com";
 /// Represents different type of errors that can happen.
 #[derive(Debug, Clone, PartialEq)]
 enum CrateError {
-    /// The error was cuased during serializing/deserializing data from JSON.
+    /// The error was caused during serializing/deserializing data from JSON.
     SerialError,
     /// The error was caused during an HTTP GET request.
     HttpError,

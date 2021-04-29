@@ -52,7 +52,7 @@ pub struct RefCamp {
     pub capacity: Option<u32>,
     pub current_hosts: Option<u32>,
     pub description: String,
-    pub last_update: String,
+    pub last_update: Option<String>,
     pub latitude: f64,
     pub longtitude: f64,
     pub name_en: String,
@@ -61,7 +61,7 @@ pub struct RefCamp {
     pub region_en: String,
     pub region_gr: String,
     pub total_confirmed_cases: u32,
-    pub total_confirmed_samples: u32,
+    pub total_confirmed_samples: Option<u32>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -117,11 +117,12 @@ mod tests {
     fn test_deserilize_refugee() {
         let ref_camps: Result<RefCamps, _> = serde_json::from_str(STR_JSON);
         assert!(ref_camps.is_ok());
-        //println!("RefCamps: {:?}", &ref_camps);
     }
 
     #[test]
-    fn test_get_refugee_camp_data() {}
+    fn test_get_refugee_camp_data() {
+        let ref_camp = get_refugee_camp_data();
+    }
 
     #[test]
     fn test_into_iterator() {

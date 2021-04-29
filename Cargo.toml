@@ -6,10 +6,10 @@ edition = "2018"
 license = "MIT"
 repository = "https://github.com/l-const/rs-covid19gr"
 description = "Rust bindings to the Covid19gr API"
-categories = ["API"]
+categories = ["api-bindings"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0" , features = ["derive"] }
-ureq = { version = "*", features = ["json"] }
+ureq = { version = "2.0", features = ["json"] }

@@ -1,5 +1,6 @@
 //! Daily recorded events
 
+use crate::build_request;
 use serde::{Deserialize, Serialize};
 
 // HTTP GET /all
@@ -81,7 +82,7 @@ pub struct IntensiveSeries {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Intensive {
-    pub intensive_care: u32,
+    pub intensive_care: Option<u32>,
     pub date: String,
 }
 
@@ -90,13 +91,12 @@ pub struct Intensive {
 /// Number of tests performed reported in Greece as timseries
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TestSeries {
-    pub cases: Vec<Tests>,
+    pub total_tests: Vec<Tests>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Tests {
-    pub tests: u32,
-    // check actual json-field : rapid-tests
+    pub tests: Option<u32>,
     #[serde(rename = "rapid-tests")]
     pub rapid_tests: u32,
     pub date: String,
@@ -133,7 +133,7 @@ pub struct AgeSlice {
 /// Number of confirmed cases per region in Greece as timeseries
 #[derive(Debug, Deserialize, Serialize)]
 pub struct RegionsHistorySeries {
-    #[serde(rename =  "regions-history")]
+    #[serde(rename = "regions-history")]
     pub regions_history: Vec<Regions>,
 }
 
@@ -187,7 +187,7 @@ pub struct VaccineSlice {
     pub area_en: String,
     pub dailydose1: u32,
     pub dailydose2: u32,
-    pub daydiff: u32,
+    pub daydiff: i32,
     pub daytotal: u32,
     pub referencedate: String,
     pub totaldistinctpersons: u32,
@@ -200,6 +200,7 @@ pub struct VaccineSlice {
 /// School operation
 #[derive(Debug, Deserialize, Serialize)]
 pub struct SchoolStatusSeries {
+    #[serde(rename = "schools-status")]
     pub schools_status: Vec<SchoolSlice>,
 }
 
@@ -214,9 +215,9 @@ pub struct SchoolSlice {
     #[serde(rename = "DateTo")]
     pub date_to: String,
     #[serde(rename = "Latitude")]
-    pub latitude: f64,
+    pub latitude: Option<f64>,
     #[serde(rename = "Longitude")]
-    pub longitude: f64,
+    pub longitude: Option<f64>,
     #[serde(rename = "MunicipalUnit")]
     pub municipal_unit: String,
     #[serde(rename = "Municipality")]
@@ -229,6 +230,84 @@ pub struct SchoolSlice {
     pub unit_name: String,
 }
 
+pub fn get_all_series_data() -> AllSeries {
+    let json_resp = build_request("all");
+    let all_series = serde_json::from_str(&json_resp).unwrap();
+    all_series
+}
+
+pub fn get_confirmed_series_data() -> ConfirmedSeries {
+    let json_resp = build_request("confirmed");
+    let confirmed_series = serde_json::from_str(&json_resp).unwrap();
+    confirmed_series
+}
+
+pub fn get_recovered_series_data() -> RecoveredSeries {
+    let json_resp = build_request("recovered");
+    let recovered_series = serde_json::from_str(&json_resp).unwrap();
+    recovered_series
+}
+
+pub fn get_deaths_series_data() -> DeathSeries {
+    let json_resp = build_request("deaths");
+    let deaths_series = serde_json::from_str(&json_resp).unwrap();
+    deaths_series
+}
+
+pub fn get_active_series_data() -> ActiveSeries {
+    let json_resp = build_request("active");
+    let active_series = serde_json::from_str(&json_resp).unwrap();
+    active_series
+}
+
+pub fn get_intensive_care_series_data() -> IntensiveSeries {
+    let json_resp = build_request("intensive-care");
+    let intensive_series = serde_json::from_str(&json_resp).unwrap();
+    intensive_series
+}
+
+pub fn get_total_tests_series_data() -> TestSeries {
+    let json_resp = build_request("total-tests");
+    let test_series = serde_json::from_str(&json_resp).unwrap();
+    test_series
+}
+
+pub fn get_age_dist_series_data() -> AgeDistributionSeries {
+    let json_resp = build_request("age-distribution-history");
+    let age_dist_series = serde_json::from_str(&json_resp).unwrap();
+    age_dist_series
+}
+
+pub fn get_regions_history_series_data() -> RegionsHistorySeries {
+    let json_resp = build_request("regions-history");
+    let region_hist_series = serde_json::from_str(&json_resp).unwrap();
+    region_hist_series
+}
+
+pub fn get_male_cases_series_data() -> MaleCasesHistory {
+    let json_resp = build_request("male-cases-history");
+    let male_cases = serde_json::from_str(&json_resp).unwrap();
+    male_cases
+}
+
+pub fn get_female_cases_series_data() -> FemaleCasesHistory {
+    let json_resp = build_request("female-cases-history");
+    let female_cases = serde_json::from_str(&json_resp).unwrap();
+    female_cases
+}
+
+pub fn get_vaccin_per_region_series_data() -> VaccineSeries {
+    let json_resp = build_request("vaccinations-per-region-history");
+    let vaccine_series = serde_json::from_str(&json_resp).unwrap();
+    vaccine_series
+}
+
+pub fn get_school_status_series_data() -> SchoolStatusSeries {
+    let json_resp = build_request("schools-status");
+    let school_series = serde_json::from_str(&json_resp).unwrap();
+    school_series
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -237,7 +316,7 @@ mod tests {
     fn test_deser_school_status() {
         let str_json: &str = r#"
             {
-                "schools_status": [
+                "schools-status": [
                     {
                     "UnitName": "string",
                     "SchoolKind": "string",
@@ -287,7 +366,7 @@ mod tests {
 
     #[test]
     fn test_deser_region_history() {
-      const STR_JSON: &str = r#"
+        const STR_JSON: &str = r#"
      
         {
             "regions-history": [
@@ -525,7 +604,7 @@ mod tests {
     fn test_deser_total_tests() {
         const STR_JSON: &str = r#"
           {
-            "cases": [
+            "total_tests": [
                 {
                 "tests": 0,
                 "rapid-tests" : 0,
@@ -537,5 +616,70 @@ mod tests {
         let tests: Result<TestSeries, _> = serde_json::from_str(STR_JSON);
         println!("{:?}", &tests);
         assert!(tests.is_ok());
+    }
+
+    #[test]
+    fn test_get_all_data() {
+        let res = get_all_series_data();
+    }
+
+    #[test]
+    fn test_get_confirmed_data() {
+        let res = get_confirmed_series_data();
+    }
+
+    #[test]
+    fn test_get_recovered_data() {
+        let res = get_recovered_series_data();
+    }
+
+    #[test]
+    fn test_get_deaths_series_data() {
+        let res = get_deaths_series_data();
+    }
+
+    #[test]
+    fn test_get_active_series_data() {
+        let res = get_active_series_data();
+    }
+
+    #[test]
+    fn test_get_intensive_care_data() {
+        let res = get_intensive_care_series_data();
+    }
+
+    #[test]
+    fn test_get_total_tests_data() {
+        let res = get_total_tests_series_data();
+    }
+
+    #[test]
+    fn test_get_age_dist_series_data() {
+        let res = get_age_dist_series_data();
+    }
+
+    #[test]
+    fn test_get_regions_history_data() {
+        let res = get_regions_history_series_data();
+    }
+
+    #[test]
+    fn test_get_males_cases_series_data() {
+        let res = get_male_cases_series_data();
+    }
+
+    #[test]
+    fn test_get_females_cases_series_data() {
+        let res = get_female_cases_series_data();
+    }
+
+    #[test]
+    fn test_vaccin_history_data() {
+        let res = get_vaccin_per_region_series_data();
+    }
+
+    #[test]
+    fn test_get_school_status_data() {
+        let res = get_school_status_series_data();
     }
 }
