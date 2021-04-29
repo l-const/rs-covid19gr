@@ -2,6 +2,20 @@
 
 use serde::{Deserialize, Serialize};
 
+// HTTP GET /all
+/// All the information about the cases
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AllSeries {
+    cases: Vec<AllSlice>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AllSlice {
+    confirmed: u32,
+    deaths: u32,
+    date: String,
+}
+
 // HTTP GET /confirmed
 // Confirmed cases
 /// Confirmed and fatal cases reported in Greece as timeseries
@@ -92,6 +106,7 @@ pub struct Tests {
 /// Age distribution of cases timeline
 #[derive(Debug, Deserialize, Serialize)]
 pub struct AgeDistributionSeries {
+    #[serde(rename = "age-distribution")]
     pub age_distribution: Vec<AgeDistributionSlice>,
 }
 
@@ -118,6 +133,7 @@ pub struct AgeSlice {
 /// Number of confirmed cases per region in Greece as timeseries
 #[derive(Debug, Deserialize, Serialize)]
 pub struct RegionsHistorySeries {
+    #[serde(rename =  "regions-history")]
     pub regions_history: Vec<Regions>,
 }
 
@@ -131,7 +147,7 @@ pub struct Regions {
 pub struct RegionSlice {
     pub area_en: String,
     pub area_gr: String,
-    pub cases: Option<String>,
+    pub cases: Option<u32>,
     pub geo_department_en: String,
     pub geo_department_gr: String,
     pub last_updated_at: String,
@@ -244,8 +260,8 @@ mod tests {
     }
 
     #[test]
-    fn test_desser_vaccin_per_region_history() {
-        let str_json: &str = r#"
+    fn test_deser_vaccin_per_region_history() {
+        const STR_JSON: &str = r#"
                         {
                 "vaccinations-history": [
                     {
@@ -264,14 +280,45 @@ mod tests {
                 ]
              }
         "#;
-        let vaccine_series_hist: Result<VaccineSeries, _> = serde_json::from_str(str_json);
+        let vaccine_series_hist: Result<VaccineSeries, _> = serde_json::from_str(STR_JSON);
         println!("{:?}", &vaccine_series_hist);
         assert!(vaccine_series_hist.is_ok());
     }
 
     #[test]
-    fn test_females_cases_history() {
-        let STR_JSON: &str = r#"
+    fn test_deser_region_history() {
+      const STR_JSON: &str = r#"
+     
+        {
+            "regions-history": [
+              {
+                "date": "2021-04-29",
+                "regions": [
+                  {
+                    "area_gr": "string",
+                    "area_en": "string",
+                    "region_gr": "string",
+                    "region_en": "string",
+                    "geo_department_gr": "string",
+                    "geo_department_en": "string",
+                    "last_updated_at": "2021-04-29",
+                    "longtitude": 0,
+                    "latitude": 0,
+                    "population": 0,
+                    "cases": 0
+                  }
+                ]
+              }
+            ]
+          }
+        "#;
+        let region_series_hist: Result<RegionsHistorySeries, _> = serde_json::from_str(STR_JSON);
+        println!("{:?}", &region_series_hist);
+        assert!(region_series_hist.is_ok());
+    }
+    #[test]
+    fn test_deser_females_cases_history() {
+        const STR_JSON: &str = r#"
             {
                 "female-cases": [
                     {
@@ -304,8 +351,8 @@ mod tests {
     }
 
     #[test]
-    fn test_males_cases_history() {
-        let STR_JSON: &str = r#"
+    fn test_deser_males_cases_history() {
+        const STR_JSON: &str = r#"
             {
                 "male-cases": [
                     {
@@ -338,8 +385,42 @@ mod tests {
     }
 
     #[test]
-    fn test_confirmed() {
-        let STR_JSON: &str = r#"
+    fn test_deser_age_dist_history() {
+        const STR_JSON: &str = r#"
+            {
+                "age-distribution": [
+                    {
+                    "date": "2021-04-28",
+                    "cases": {
+                        "0-17": 0,
+                        "18-39": 0,
+                        "40-64": 0,
+                        "65+": 0
+                    },
+                    "critical": {
+                        "0-17": 0,
+                        "18-39": 0,
+                        "40-64": 0,
+                        "65+": 0
+                    },
+                    "deaths": {
+                        "0-17": 0,
+                        "18-39": 0,
+                        "40-64": 0,
+                        "65+": 0
+                    }
+                    }
+                ]
+            }
+        "#;
+        let age_dist_series_hist: Result<AgeDistributionSeries, _> = serde_json::from_str(STR_JSON);
+        println!("{:?}", &age_dist_series_hist);
+        assert!(age_dist_series_hist.is_ok());
+    }
+
+    #[test]
+    fn test_deser_confirmed() {
+        const STR_JSON: &str = r#"
           {
             "cases": [
                 {
@@ -355,8 +436,8 @@ mod tests {
     }
 
     #[test]
-    fn test_recovered() {
-        let STR_JSON: &str = r#"
+    fn test_deser_recovered() {
+        const STR_JSON: &str = r#"
           {
             "cases": [
                 {
@@ -372,8 +453,8 @@ mod tests {
     }
 
     #[test]
-    fn test_deaths() {
-        let STR_JSON: &str = r#"
+    fn test_desser_deaths() {
+        const STR_JSON: &str = r#"
           {
             "cases": [
                 {
@@ -389,8 +470,8 @@ mod tests {
     }
 
     #[test]
-    fn test_active() {
-        let STR_JSON: &str = r#"
+    fn test_deser_active() {
+        const STR_JSON: &str = r#"
           {
             "cases": [
                 {
@@ -403,5 +484,58 @@ mod tests {
         let active: Result<ActiveSeries, _> = serde_json::from_str(STR_JSON);
         println!("{:?}", &active);
         assert!(active.is_ok());
+    }
+
+    #[test]
+    fn test_deser_all() {
+        const STR_JSON: &str = r#"
+          {
+            "cases": [
+                {
+                "confirmed": 0,
+                "deaths": 0,
+                "date": "2021-04-29"
+                }
+            ]
+           }
+        "#;
+        let all: Result<AllSeries, _> = serde_json::from_str(STR_JSON);
+        println!("{:?}", &all);
+        assert!(all.is_ok());
+    }
+
+    #[test]
+    fn test_desser_intensive_care() {
+        const STR_JSON: &str = r#"
+          {
+            "cases": [
+                {
+                "intensive_care": 0,
+                "date": "2021-04-29"
+                }
+            ]
+           }
+        "#;
+        let intensive: Result<IntensiveSeries, _> = serde_json::from_str(STR_JSON);
+        println!("{:?}", &intensive);
+        assert!(intensive.is_ok());
+    }
+
+    #[test]
+    fn test_deser_total_tests() {
+        const STR_JSON: &str = r#"
+          {
+            "cases": [
+                {
+                "tests": 0,
+                "rapid-tests" : 0,
+                "date": "2021-04-29"
+                }
+            ]
+           }
+        "#;
+        let tests: Result<TestSeries, _> = serde_json::from_str(STR_JSON);
+        println!("{:?}", &tests);
+        assert!(tests.is_ok());
     }
 }

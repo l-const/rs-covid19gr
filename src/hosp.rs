@@ -1,7 +1,6 @@
 //! Per hospital data
 
 use crate::build_request;
-use crate::BASE_URL;
 use serde::{Deserialize, Serialize};
 
 // HTTP GET /western-macedonia
@@ -33,7 +32,8 @@ pub struct HospitalSlice {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TotalSlice {
-    pub hospitalized_ICU_current: u32,
+    #[serde(rename = "hospitalized_ICU_current")]
+    pub hospitalized_icu_current: u32,
     pub total_deaths: u32,
     pub total_samples: u32,
     pub total_samples_negative: u32,
@@ -128,5 +128,16 @@ mod tests {
         let west_mac_death_data: Result<WestMacDeathSeries, _> = serde_json::from_str(STR_JSON);
         println!("{:?}", west_mac_death_data);
         assert!(west_mac_death_data.is_ok());
+    }
+    
+    #[test]
+    fn test_get_west_mac() {
+        let json_resp = build_request("western-macedonia");
+    }
+
+
+    #[test]
+    fn test_get_west_mac_deaths() {
+        let json_resp = build_request("western-macedonia-deaths");
     }
 }
