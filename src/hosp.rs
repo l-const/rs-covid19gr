@@ -20,24 +20,24 @@ pub struct WestMacSlice {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct HospitalSlice {
-    pub home_restriction_current: u32,
+    pub home_restriction_current: f32,
     pub hospital_name: String,
-    pub hospitalized_current: u32,
-    pub hospitalized_negative: u32,
-    pub hospitalized_pending_result: u32,
-    pub hospitalized_positive: u32,
-    pub new_recoveries: u32,
-    pub new_samples: u32,
+    pub hospitalized_current: f32,
+    pub hospitalized_negative: f32,
+    pub hospitalized_pending_result: f32,
+    pub hospitalized_positive: f32,
+    pub new_recoveries: f32,
+    pub new_samples: f32,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TotalSlice {
     #[serde(rename = "hospitalized_ICU_current")]
-    pub hospitalized_icu_current: u32,
-    pub total_deaths: u32,
-    pub total_samples: u32,
-    pub total_samples_negative: u32,
-    pub total_samples_positive: u32,
+    pub hospitalized_icu_current: f32,
+    pub total_deaths: f32,
+    pub total_samples: f32,
+    pub total_samples_negative: f32,
+    pub total_samples_positive: f32,
 }
 
 // HTTP GET /western-macedonia-deaths
@@ -50,7 +50,7 @@ pub struct WestMacDeathSeries {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct WestMacDeathSlice {
-    pub age: u32,
+    pub age: f32,
     pub date: String,
     pub permanent_residence_municipality_en: String,
     pub permanent_residence_municipality_gr: String,
@@ -129,15 +129,14 @@ mod tests {
         println!("{:?}", west_mac_death_data);
         assert!(west_mac_death_data.is_ok());
     }
-    
+
     #[test]
     fn test_get_west_mac() {
-        let json_resp = build_request("western-macedonia");
+        let json_resp = get_western_macedonia_data();
     }
-
 
     #[test]
     fn test_get_west_mac_deaths() {
-        let json_resp = build_request("western-macedonia-deaths");
+        let json_resp = get_western_macedonia_death_data();
     }
 }
