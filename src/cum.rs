@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::build_request;
+use crate::{build_request, impl_into_iter, impl_iter_and_mut};
 
 // HTTP GET /total
 /// Latest total cummulative data in Greece
@@ -41,6 +41,9 @@ pub struct Region {
     pub cases_per_100000_people: f32,
 }
 
+impl_into_iter!(Regions, Region, regions);
+impl_iter_and_mut!(Regions, Region, regions);
+
 // HTTP GET /age-distribution
 /// Age distribution of patients
 #[derive(Debug, Serialize, Deserialize)]
@@ -65,12 +68,16 @@ pub struct TotalAgeRes {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AgeSlice {
+    /// Age :[0-17]
     #[serde(rename = "0-17")]
     pub age_group1: u32,
+    /// Age :[18-39]
     #[serde(rename = "18-39")]
     pub age_group2: u32,
+    /// Age :[40-64]
     #[serde(rename = "40-64")]
     pub age_group3: u32,
+    /// Age :[65+]
     #[serde(rename = "65+")]
     pub age_group4: u32,
 }

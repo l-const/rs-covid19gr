@@ -1,6 +1,7 @@
 //! Daily recorded events
 
 use crate::build_request;
+use crate::{impl_into_iter, impl_iter_and_mut};
 use serde::{Deserialize, Serialize};
 
 // HTTP GET /all
@@ -307,6 +308,42 @@ pub fn get_school_status_series_data() -> SchoolStatusSeries {
     let school_series = serde_json::from_str(&json_resp).unwrap();
     school_series
 }
+
+// Macros Impls
+impl_into_iter!(SchoolStatusSeries, SchoolSlice, schools_status);
+impl_iter_and_mut!(SchoolStatusSeries, SchoolSlice, schools_status);
+impl_into_iter!(VaccineSeries, VaccineSlice, vaccinations_history);
+impl_iter_and_mut!(VaccineSeries, VaccineSlice, vaccinations_history);
+impl_into_iter!(FemaleCasesHistory, AgeDistributionSlice, female_cases);
+impl_iter_and_mut!(FemaleCasesHistory, AgeDistributionSlice, female_cases);
+impl_into_iter!(MaleCasesHistory, AgeDistributionSlice, male_cases);
+impl_iter_and_mut!(MaleCasesHistory, AgeDistributionSlice, male_cases);
+impl_into_iter!(RegionsHistorySeries, Regions, regions_history);
+impl_iter_and_mut!(RegionsHistorySeries, Regions, regions_history);
+impl_into_iter!(
+    AgeDistributionSeries,
+    AgeDistributionSlice,
+    age_distribution
+);
+impl_iter_and_mut!(
+    AgeDistributionSeries,
+    AgeDistributionSlice,
+    age_distribution
+);
+impl_into_iter!(DeathSeries, Deaths, cases);
+impl_iter_and_mut!(DeathSeries, Deaths, cases);
+impl_into_iter!(AllSeries, AllSlice, cases);
+impl_iter_and_mut!(AllSeries, AllSlice, cases);
+impl_into_iter!(ConfirmedSeries, Confirmed, cases);
+impl_iter_and_mut!(ConfirmedSeries, Confirmed, cases);
+impl_into_iter!(RecoveredSeries, Recovered, cases);
+impl_iter_and_mut!(RecoveredSeries, Recovered, cases);
+impl_into_iter!(ActiveSeries, Active, cases);
+impl_iter_and_mut!(ActiveSeries, Active, cases);
+impl_into_iter!(IntensiveSeries, Intensive, cases);
+impl_iter_and_mut!(IntensiveSeries, Intensive, cases);
+impl_into_iter!(TestSeries, Tests, total_tests);
+impl_iter_and_mut!(TestSeries, Tests, total_tests);
 
 #[cfg(test)]
 mod tests {

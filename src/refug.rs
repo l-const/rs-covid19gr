@@ -4,7 +4,7 @@ use std::ops::Deref;
 
 use serde::{Deserialize, Serialize};
 
-use crate::build_request;
+use crate::{build_request, impl_into_iter, impl_iter_and_mut};
 
 // HTTP GET /regugee-camps
 /// Recorded cases in Refugee-camps.
@@ -14,36 +14,8 @@ pub struct RefCamps {
     pub refugee_camps: Vec<RefCamp>,
 }
 
-impl Deref for RefCamps {
-    type Target = Vec<RefCamp>;
-    fn deref(&self) -> &Self::Target {
-        &self.refugee_camps
-    }
-}
-
-impl IntoIterator for RefCamps {
-    type Item = RefCamp;
-    type IntoIter = std::vec::IntoIter<RefCamp>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.refugee_camps.into_iter()
-    }
-}
-
-/// Slice Iterator for RefCamp.
-pub type IterRefCamp<'iter> = core::slice::Iter<'iter, RefCamp>;
-/// Mutable slice Iterator for RefCamp.
-pub type IterMutRefCamp<'iter_mut> = core::slice::IterMut<'iter_mut, RefCamp>;
-
-impl RefCamps {
-    pub fn iter(&self) -> IterRefCamp {
-        self.refugee_camps.iter()
-    }
-
-    pub fn iter_mut(&mut self) -> IterMutRefCamp {
-        self.refugee_camps.iter_mut()
-    }
-}
+impl_into_iter!(RefCamps, RefCamp, refugee_camps);
+impl_iter_and_mut!(RefCamps, RefCamp, refugee_camps);
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct RefCamp {
@@ -145,12 +117,5 @@ mod tests {
         let mut first = iter_mut.next();
         let mut second = iter_mut.next();
         println!("{:?} {:?}", first, second);
-    }
-
-    #[test]
-    fn test_derer() {
-        let ref_camps: RefCamps = serde_json::from_str(STR_JSON).unwrap();
-        let vec_ref = ref_camps.deref();
-        println!("{:?}", (*ref_camps).iter());
     }
 }
