@@ -1,9 +1,10 @@
 //! Rust bindings  for the Covid19gr API!
+mod macros;
+
 pub mod cum;
 pub mod daily;
 pub mod hosp;
 pub mod refug;
-mod macros;
 
 /// Define custom Result
 type Result<T> = std::result::Result<T, CrateError>;

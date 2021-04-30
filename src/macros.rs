@@ -1,3 +1,4 @@
+#[macro_export]
 macro_rules! impl_into_iter {
     ($container:ty, $slice:ty, $field:ident) => {
         impl IntoIterator for $container {
@@ -10,6 +11,7 @@ macro_rules! impl_into_iter {
     };
 }
 
+#[macro_export]
 macro_rules! impl_iter_and_mut {
     ($container:ty, $slice:ty, $field:ident) => {
         impl $container {
@@ -17,7 +19,9 @@ macro_rules! impl_iter_and_mut {
                 self.$field.iter()
             }
 
-            pub fn iter_mut<'iter_mut>(&'iter_mut mut self) -> core::slice::IterMut<'iter_mut, $slice> {
+            pub fn iter_mut<'iter_mut>(
+                &'iter_mut mut self,
+            ) -> core::slice::IterMut<'iter_mut, $slice> {
                 self.$field.iter_mut()
             }
         }

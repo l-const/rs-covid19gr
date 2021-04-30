@@ -1,6 +1,6 @@
 //! Per hospital data
 
-use crate::macros;
+use crate::{impl_into_iter, impl_iter_and_mut, macros};
 
 use crate::build_request;
 use serde::{Deserialize, Serialize};
@@ -71,6 +71,20 @@ pub fn get_western_macedonia_death_data() -> WestMacDeathSeries {
     let west_mac_death_data = serde_json::from_str(&json_resp).unwrap();
     west_mac_death_data
 }
+
+// Macros impl
+impl_into_iter!(WestMacSeries, WestMacSlice, western_macedonia);
+impl_iter_and_mut!(WestMacSeries, WestMacSlice, western_macedonia);
+impl_into_iter!(
+    WestMacDeathSeries,
+    WestMacDeathSlice,
+    western_macedonia_deaths
+);
+impl_iter_and_mut!(
+    WestMacDeathSeries,
+    WestMacDeathSlice,
+    western_macedonia_deaths
+);
 
 #[cfg(test)]
 mod tests {
