@@ -3,6 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::build_request;
+use crate::macros;
+
 
 // HTTP GET /total
 /// Latest total cummulative data in Greece

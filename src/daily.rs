@@ -2,6 +2,8 @@
 
 use crate::build_request;
 use serde::{Deserialize, Serialize};
+use crate::macros;
+
 
 // HTTP GET /all
 /// All the information about the cases

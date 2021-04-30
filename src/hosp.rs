@@ -1,5 +1,7 @@
 //! Per hospital data
 
+use crate::macros;
+
 use crate::build_request;
 use serde::{Deserialize, Serialize};
 
