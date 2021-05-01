@@ -60,12 +60,14 @@ pub struct WestMacDeathSlice {
     pub underlying_diseases: String,
 }
 
+/// Get the daily reported data from the hospitals of Western Macedonia as timeseries
 pub fn get_western_macedonia_data() -> WestMacSeries {
     let json_resp = build_request("western-macedonia");
     let west_mac_data = serde_json::from_str(&json_resp).unwrap();
     west_mac_data
 }
 
+/// Get information of Covid-19 victims in Western Macedonia
 pub fn get_western_macedonia_death_data() -> WestMacDeathSeries {
     let json_resp = build_request("western-macedonia-deaths");
     let west_mac_death_data = serde_json::from_str(&json_resp).unwrap();

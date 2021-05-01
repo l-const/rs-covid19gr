@@ -44,6 +44,7 @@ pub struct RecordedEvent {
     pub samples: Option<u32>,
 }
 
+/// Get information of Covid-19 spread in Refugee Camps
 pub fn get_refugee_camp_data() -> RefCamps {
     let json_resp = build_request("refugee-camps");
     let ref_camps = serde_json::from_str(&json_resp).unwrap();
