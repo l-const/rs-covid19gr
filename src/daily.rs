@@ -231,78 +231,91 @@ pub struct SchoolSlice {
     pub unit_name: String,
 }
 
+/// Get all the confirmed and fatal cases reported in Greece as timeseries
 pub fn get_all_series_data() -> AllSeries {
     let json_resp = build_request("all");
     let all_series = serde_json::from_str(&json_resp).unwrap();
     all_series
 }
 
+/// Get all the confirmed cases reported in Greece as timeseries
 pub fn get_confirmed_series_data() -> ConfirmedSeries {
     let json_resp = build_request("confirmed");
     let confirmed_series = serde_json::from_str(&json_resp).unwrap();
     confirmed_series
 }
 
+/// Get all the recovered cases reported in Greece as timeseries
 pub fn get_recovered_series_data() -> RecoveredSeries {
     let json_resp = build_request("recovered");
     let recovered_series = serde_json::from_str(&json_resp).unwrap();
     recovered_series
 }
 
+/// Get all the deaths reported in Greece as timeseries
 pub fn get_deaths_series_data() -> DeathSeries {
     let json_resp = build_request("deaths");
     let deaths_series = serde_json::from_str(&json_resp).unwrap();
     deaths_series
 }
 
+/// Get all the active cases reported in Greece as timeseries
 pub fn get_active_series_data() -> ActiveSeries {
     let json_resp = build_request("active");
     let active_series = serde_json::from_str(&json_resp).unwrap();
     active_series
 }
 
+/// Get the number of patients in intensive care units reported in Greece as timeseries
 pub fn get_intensive_care_series_data() -> IntensiveSeries {
     let json_resp = build_request("intensive-care");
     let intensive_series = serde_json::from_str(&json_resp).unwrap();
     intensive_series
 }
 
+/// Get the number of tests performed in Greece as timeseries
 pub fn get_total_tests_series_data() -> TestSeries {
     let json_resp = build_request("total-tests");
     let test_series = serde_json::from_str(&json_resp).unwrap();
     test_series
 }
 
+/// Get the timeline of the age distribution of the cases reported in Greece
 pub fn get_age_dist_series_data() -> AgeDistributionSeries {
     let json_resp = build_request("age-distribution-history");
     let age_dist_series = serde_json::from_str(&json_resp).unwrap();
     age_dist_series
 }
 
+/// Get the total number of confirmed cases per region in Greece as timeseries.
 pub fn get_regions_history_series_data() -> RegionsHistorySeries {
     let json_resp = build_request("regions-history");
     let region_hist_series = serde_json::from_str(&json_resp).unwrap();
     region_hist_series
 }
 
+/// Get the timeline of the age distribution of the male cases reported in Greece
 pub fn get_male_cases_series_data() -> MaleCasesHistory {
     let json_resp = build_request("male-cases-history");
     let male_cases = serde_json::from_str(&json_resp).unwrap();
     male_cases
 }
 
+/// Get the timeline of the age distribution of the female cases reported in Greece
 pub fn get_female_cases_series_data() -> FemaleCasesHistory {
     let json_resp = build_request("female-cases-history");
     let female_cases = serde_json::from_str(&json_resp).unwrap();
     female_cases
 }
 
+/// Get the timeline of vaccinations per region in Greece
 pub fn get_vaccin_per_region_series_data() -> VaccineSeries {
     let json_resp = build_request("vaccinations-per-region-history");
     let vaccine_series = serde_json::from_str(&json_resp).unwrap();
     vaccine_series
 }
 
+/// Get info concerning Greek Schools Operation Changes due to Covid-19. Only schools which are not closed due to lockdown restrictions are included.
 pub fn get_school_status_series_data() -> SchoolStatusSeries {
     let json_resp = build_request("schools-status");
     let school_series = serde_json::from_str(&json_resp).unwrap();
