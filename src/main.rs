@@ -2,7 +2,6 @@ use rs_covid19gr::daily::*;
 const BASE_URL: &str = "https://covid-19-greece.herokuapp.com";
 
 fn main() {
-    println!("Hello from main");
     let total_tests_series = get_total_tests_series_data();
     let iter_len = total_tests_series.iter().len();
     let first_iter = total_tests_series.iter().skip(1);
